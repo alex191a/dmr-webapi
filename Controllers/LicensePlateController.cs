@@ -1,5 +1,6 @@
 using DMRWebScrapper_service.Code;
 using DMRWebScrapper_service.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DMRWebScrapper_service.Controllers
@@ -17,9 +18,10 @@ namespace DMRWebScrapper_service.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "Getinfo")]
+        [HttpGet("/Getinfo")]
+        [EnableCors]
 
-        public async Task<IActionResult> Get(string nummerplade)
+        public async Task<IActionResult> GetNew(string nummerplade)
         {
             try
             {
@@ -29,7 +31,21 @@ namespace DMRWebScrapper_service.Controllers
             catch
             (Exception ex)
             {
-                throw ex;
+                
+                return Problem(ex.Message);
+            }
+        }
+        [HttpGet("/GetHistory")]
+        public async Task<IActionResult> GetOld(string nummerplade, DateTime dato)
+        {
+            try
+            {
+                Bildata? bildata = await DMRProxy.HentOplysninger(nummerplade, dato);
+                return Ok(bildata);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
         }
     }
