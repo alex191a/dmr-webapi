@@ -19,5 +19,16 @@
             Afgifter = new DMRAfgifter();
             Forsikring = new DMRForsikring();
         }
+        public bool IsPolice()
+        {
+            switch (Forsikring.Forsikring.ToUpper())
+            {
+                //tilføj her efter kommende. hvis flere kriterier tilføjes, kan de bearbejdes her.
+                case "SELVFORSIKRING":
+                    return true;
+                default: return false;
+
+            }
+        }
     }
 }
